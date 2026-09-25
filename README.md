@@ -16,7 +16,12 @@ A Spring Boot blog application with user authentication, blog management, and ge
 SPRING_DATASOURCE_URL=jdbc:mysql://your-mysql-host:port/database_name?ssl-mode=REQUIRED
 SPRING_DATASOURCE_USERNAME=your_username
 SPRING_DATASOURCE_PASSWORD=your_password
+AI_PROVIDER=gemini
+AI_MODEL=gemini-2.5-flash
+AI_GEMINI_API_KEY=your_gemini_api_key
 ```
+
+Keep `.env` private. It is excluded from the Docker build context and is supplied to the running container with `--env-file`.
 
 ## Running the Application
 
@@ -50,8 +55,21 @@ docker run -p 8080:8080 \
   -e SPRING_DATASOURCE_URL="your_database_url" \
   -e SPRING_DATASOURCE_USERNAME="your_username" \
   -e SPRING_DATASOURCE_PASSWORD="your_password" \
+  -e AI_PROVIDER="gemini" \
+  -e AI_MODEL="gemini-2.5-flash" \
+  -e AI_GEMINI_API_KEY="your_gemini_api_key" \
   blog-application
 ```
+
+### Verify the container
+
+After the container starts, verify the server before opening the frontend:
+
+```bash
+curl http://localhost:8080/api/auth/check
+```
+
+This should return JSON with `"authenticated":false`. AI endpoints require a logged-in session, so test them from the frontend after signing in.
 
 ## Docker Hub Deployment
 
